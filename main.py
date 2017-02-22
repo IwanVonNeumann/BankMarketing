@@ -1,5 +1,6 @@
 from service import dao
 from service.preprocessing import pre_process
+from service.stats import print_overall_stats
 
 data = dao.get_mapped_data(delimiter=";")
 
@@ -15,7 +16,7 @@ categorical_fields = [
     {'name': 'poutcome', 'frequency_threshold': 0}
 ]
 
-print("Records total:", len(data))
+print_overall_stats(data)
 
 for i in range(0, 5):
     print(data[i])

@@ -1,6 +1,6 @@
 from service.fields_instrumentation import process_all_binary_fields, process_all_categorical_fields
 
 
-def pre_process(data, binary_fields, categorical_fields, default_value='OTHER'):
+def pre_process(data, binary_fields, categorical_fields, default_value='OTHER', verbose=False):
     process_all_binary_fields(data, binary_fields)
-    process_all_categorical_fields(data, categorical_fields, default_value=default_value)
+    process_all_categorical_fields(data, categorical_fields, default_value=default_value, verbose=verbose)

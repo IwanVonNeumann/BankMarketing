@@ -21,7 +21,9 @@ print_overall_stats(data)
 for i in range(0, 5):
     print(data[i])
 
-pre_process(data, binary_fields, categorical_fields)
+print("------------------")
+
+pre_process(data, binary_fields, categorical_fields, verbose=True)
 
 print("------------------")
 

@@ -1,4 +1,4 @@
-from service.dict_utils import replace_value
+from service.dict_utils import replace_value, format_dict
 from service.list_utils import get_merged_rare_values_dict
 
 BINARY_DICT = {'no': 0, 'yes': 1}
@@ -20,10 +20,13 @@ def process_all_binary_fields(data, field_names):
             process_binary_field(item, field_name)
 
 
-def process_all_categorical_fields(data, categorical_fields, default_value='OTHER'):
+def process_all_categorical_fields(data, categorical_fields, default_value='OTHER', verbose=False):
+    if verbose:
+        print("Categorical fields' stats:")
     for field in categorical_fields:
         values = [item[field["name"]] for item in data]
         merged_values = get_merged_rare_values_dict(values, field["frequency_threshold"])
-        # print(field["name"], {k: round(v, 3) if isinstance(v, float) else v for k, v in merged_values.items()})
+        if verbose:
+            print(field["name"] + ":", format_dict(merged_values, 3))
         for item in data:
             replace_value(item, field["name"], merged_values, default_value=default_value)

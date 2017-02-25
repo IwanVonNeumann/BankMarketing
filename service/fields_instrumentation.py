@@ -1,5 +1,6 @@
 from service.dict_utils import replace_value, format_dict
 from service.list_utils import get_merged_rare_values_dict
+from service.logger import log
 
 BINARY_DICT = {'no': 0, 'yes': 1}
 
@@ -21,12 +22,11 @@ def process_all_binary_fields(data, field_names):
 
 
 def process_all_categorical_fields(data, categorical_fields, default_value='OTHER', verbose=False):
-    if verbose:
-        print("Categorical fields' stats:")
+    log("Categorical fields' stats:", verbose=verbose)
     for field in categorical_fields:
-        values = [item[field["name"]] for item in data]
-        merged_values = get_merged_rare_values_dict(values, field["frequency_threshold"])
-        if verbose:
-            print(field["name"] + ":", format_dict(merged_values, 3))
+        values = [item[field['name']] for item in data]
+        log(field['name'], verbose=verbose)
+        merged_values = get_merged_rare_values_dict(values, field['frequency_threshold'], verbose=verbose)
+        log(format_dict(merged_values, 3), verbose=verbose)
         for item in data:
-            replace_value(item, field["name"], merged_values, default_value=default_value)
+            replace_value(item, field['name'], merged_values, default_value=default_value)

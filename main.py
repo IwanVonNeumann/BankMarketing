@@ -1,4 +1,5 @@
 from service import dao
+from service.logger import print_delimiter
 from service.preprocessing import pre_process
 from service.stats import print_overall_stats
 
@@ -21,11 +22,11 @@ print_overall_stats(data)
 for i in range(0, 5):
     print(data[i])
 
-print("------------------")
+print_delimiter()
 
 pre_process(data, binary_fields, categorical_fields, verbose=True)
 
-print("------------------")
+print_delimiter()
 
 for i in range(0, 5):
     print(data[i])

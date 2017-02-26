@@ -3,7 +3,7 @@ from random import shuffle
 from sklearn.ensemble import RandomForestClassifier
 
 from service import dao
-from service.dataset_utils import extract_keys, extract_values
+from service.dataset_utils import extract_keys, extract_values, map_feature_names_to_data
 from service.demo_utils import get_balanced_data
 from service.logger import print_delimiter
 from service.preprocessing import pre_process
@@ -63,13 +63,19 @@ rfClassifier.fit(train, target)
 class_probabilities = rfClassifier.predict_proba(problem)
 success_probabilities = [x[1] for x in class_probabilities]
 
-# feature_names = ['prob_eval'] + feature_names
-# print(feature_names)
-# test_records = [[p] + item for item, p in (problem, success_probabilities)]
+PROB_EVAL = 'prob_eval'
+
+feature_names = [PROB_EVAL, 'y'] + feature_names
+for i in range(0, len(test_records)):
+    test_records[i] = [round(success_probabilities[i], 2), answer[i]] + test_records[i]
+
+clients = map_feature_names_to_data(feature_names, test_records)
+prioritized_clients = sorted(clients, key=lambda x: x[PROB_EVAL], reverse=True)
 
 for i in range(k):
-    print("Client:", dict(zip(feature_names, test_records[i])))
-    print('y' if answer[i] == 1 else 'n')
-    print("%.2f\n" % success_probabilities[i])
+    print("Client:", prioritized_clients[i])
+    print('YES' if prioritized_clients[i]['y'] == 1 else 'NO')
+    print("%.2f\n" % prioritized_clients[i][PROB_EVAL])
+
 
 print("Model precision:", rfClassifier.oob_score_)

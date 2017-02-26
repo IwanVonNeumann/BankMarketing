@@ -19,11 +19,6 @@ categorical_fields = [
 
 print_overall_stats(data)
 
-for i in range(0, 5):
-    print(data[i])
-
-print(len(data))
-
 print_delimiter()
 
 records_to_remove = [
@@ -37,7 +32,4 @@ data = pre_process(data, records_to_remove, fields_to_remove, binary_fields, cat
 
 print_delimiter()
 
-for i in range(0, 5):
-    print(data[i])
 
-print(len(data))

@@ -1,3 +1,5 @@
+from sklearn.feature_extraction import DictVectorizer
+
 from service.dict_utils import replace_value, format_dict
 from service.list_utils import get_merged_rare_values_dict
 from service.logger import log
@@ -21,7 +23,7 @@ def process_all_binary_fields(data, field_names):
             process_binary_field(item, field_name)
 
 
-def process_all_categorical_fields(data, categorical_fields, default_value='OTHER', verbose=False):
+def pack_all_categorical_fields(data, categorical_fields, default_value='OTHER', verbose=False):
     log("Categorical fields' stats:", verbose=verbose)
     for field in categorical_fields:
         values = [item[field['name']] for item in data]
@@ -30,6 +32,24 @@ def process_all_categorical_fields(data, categorical_fields, default_value='OTHE
         log(format_dict(merged_values, 3), verbose=verbose)
         for item in data:
             replace_value(item, field['name'], merged_values, default_value=default_value)
+
+
+def map_feature_names_to_data(headers, data):
+    return [dict(zip(headers, item)) for item in data]
+
+
+def split_all_categorical_fields(data, key_feature='y', verbose=False):
+    dict_vectorizer = DictVectorizer()
+
+    transformed_data = list(dict_vectorizer.fit_transform(data).toarray())
+    feature_names = dict_vectorizer.get_feature_names()
+
+    if verbose:
+        print("Features before:", len(data[0]))
+        print("Features after:", len(feature_names))
+        print(feature_names)
+
+    return map_feature_names_to_data(feature_names, transformed_data)
 
 
 def remove_field(item, field_name):

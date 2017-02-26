@@ -75,3 +75,11 @@ def filter_data(data, rules, verbose=False):
     result = list(filtered_data)
     log("Records dropped:", len(data) - len(result), verbose=verbose)
     return result
+
+
+def extract_keys(data):
+    return list(data[0].keys())
+
+
+def extract_values(data):
+    return [list(item.values()) for item in data]

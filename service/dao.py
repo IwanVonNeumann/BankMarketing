@@ -1,6 +1,7 @@
 import csv
 
-DATA_PATH = "data/bank.csv"
+# DATA_PATH = "data/bank.csv"
+DATA_PATH = "data/bank-full.csv"
 
 
 def get_csv_data(delimiter=',', quotechar='"'):

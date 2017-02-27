@@ -45,7 +45,7 @@ print_delimiter()
 feature_names = extract_keys(pre_processed_data)
 only_values = extract_values(pre_processed_data)
 
-k = 20
+k = 578
 n = len(pre_processed_data)
 
 known = only_values[:n - k]
@@ -72,10 +72,19 @@ for i in range(0, len(test_records)):
 clients = map_feature_names_to_data(feature_names, test_records)
 prioritized_clients = sorted(clients, key=lambda x: x[PROB_EVAL], reverse=True)
 
-for i in range(k):
-    print("Client:", prioritized_clients[i])
-    print('YES' if prioritized_clients[i]['y'] == 1 else 'NO')
-    print("%.2f\n" % prioritized_clients[i][PROB_EVAL])
-
+# for i in range(k):
+#     print("Client:", prioritized_clients[i])
+#     print('YES' if prioritized_clients[i]['y'] == 1 else 'NO')
+#     print("%.2f\n" % prioritized_clients[i][PROB_EVAL])
 
 print("Model precision:", rfClassifier.oob_score_)
+
+successful_clients_in_test = sum(answer)
+
+print("Total clients in test:", k)
+print("Successful clients in test:", successful_clients_in_test)
+
+s = 0
+for i in range(k):
+    s += prioritized_clients[i]['y']
+    print("{0}\t{1:.2f}\t{2:.2f}".format(i + 1, (i + 1) / k * 100, s / successful_clients_in_test * 100))
